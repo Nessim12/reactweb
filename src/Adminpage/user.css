@@ -1,0 +1,442 @@
+.cssbuttons-io-button {
+    position:absolute;
+    top:20%;
+    left:70%;
+
+    width: 250px;
+    height: 70px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    gap: .2em;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 30px;
+    padding: .3em 1.3em;
+    color: white;
+    background: linear-gradient(0deg, rgb(34, 36, 36), rgb(168, 168, 168));
+    border: none;
+    outline: none;
+    border-bottom: 3px solid rgb(178, 180, 179);
+    box-shadow: 0 .5em .5em -.4em rgb(0, 0, 0, .5);
+    letter-spacing: 0.08em;
+    border-radius: 20em;
+    cursor: pointer;
+    transition: .5s;
+  }
+  
+  .cssbuttons-io-button:hover {
+    filter: brightness(1.2);
+    color: rgb(0, 0, 0, .5);
+  }
+  
+  .cssbuttons-io-button:active {
+    transition: 0s;
+    transform: rotate(-1deg);
+  }
+
+  .user-table {
+ /* Center the table horizontally and provide spacing */
+    width: 50%; /* Set the table width to 80% of its container */
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .user-table th,
+  .user-table td {
+    padding: 12px 15px;
+    text-align: left;
+  }
+  
+  .user-table th {
+    background-color: #666666;
+    color: white;
+  }
+  
+  .user-table tbody tr:nth-child(even) {
+    background-color: #dfe6e4;
+  }
+  
+  .user-table tbody tr:hover {
+    background-color: #868686;
+  }
+  
+
+  .form {
+    position:fixed;
+    top:100px;
+    left:10%;
+    z-index: 9999; /* Ensure the form appears above other elements */
+
+    display: flex;
+    flex-direction: column;
+    width:700px;
+    gap: 40px;
+    max-width: 400px;
+    padding: 30px;
+    border-radius: 20px;
+    position: relative;
+    background-color: #1a1a1a;
+    color: #fff;
+    border: 1px solid #333;
+  }
+  
+  .title {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -1px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+    color: #ffffff;
+  }
+  
+  .title::before {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .title::after {
+    width: 18px;
+    height: 18px;
+    animation: pulse 1s linear infinite;
+  }
+  
+  .title::before,
+  .title::after {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    left: 0px;
+    background-color: #16df30;
+  }
+  
+  
+  .flex {
+    display: flex;
+    width: 100%;
+    gap: 6px;
+  }
+  
+  .form label {
+    position: relative;
+  }
+  .delete-button {
+    color: red; /* Set color to red */
+    font-size: 38px;
+    padding-left: 10px; /* Set font size to be bigger */
+  }
+  .form label .input {
+    background-color: #333;
+    color: #fff;
+    width: 100%;
+    padding: 20px 05px 05px 10px;
+    outline: 0;
+    border: 1px solid rgba(105, 105, 105, 0.397);
+    border-radius: 10px;
+  }
+  
+  .form label .input + span {
+    color: rgba(255, 255, 255, 0.5);
+    position: absolute;
+    left: 10px;
+    top: 0px;
+    font-size: 0.9em;
+    cursor: text;
+    transition: 0.3s ease;
+  }
+  
+  .form label .input:placeholder-shown + span {
+    top: 12.5px;
+    font-size: 0.9em;
+  }
+  
+  .form label .input:focus + span,
+  .form label .input:valid + span {
+    color: #00ff55;
+    top: 0px;
+    font-size: 0.7em;
+    font-weight: 600;
+  }
+  
+  .input {
+    font-size: medium;
+  }
+  
+  .submit {
+    border: none;
+    outline: none;
+    padding: 10px;
+    border-radius: 10px;
+    color: #1a1a1a;
+    font-size: 16px;
+    transform: .3s ease;
+    background-color: #b1cdd6;
+  }
+  
+  .submit:hover {
+    background-color: #00ff55;
+  }
+  
+  @keyframes pulse {
+    from {
+      transform: scale(0.9);
+      opacity: 1;
+    }
+  
+    to {
+      transform: scale(1.8);
+      opacity: 0;
+    }
+  }
+  .buttonc {
+    position:absolute;
+    top:0%;
+    left:76%;
+    width: 1em;
+    height: 2em;
+    border: none;
+    background: rgb(241, 39, 39);
+    border-radius: 7px;
+    transition: background 0.5s;
+  }
+  
+  .X {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1em;
+    height: 1.5px;
+    background-color: rgb(255, 255, 255);
+    transform: translateX(-50%) rotate(45deg);
+  }
+  
+  .Y {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1em;
+    height: 1.5px;
+    background-color: #fff;
+    transform: translateX(-50%) rotate(-45deg);
+  }
+  
+  .close {
+    position: absolute;
+    display: flex;
+    padding: 1px;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-50%);
+    bottom: 70%;
+    left: 50%;
+    width: 3em;
+    height: 1.7em;
+    font-size: 12px;
+    background-color: rgb(19, 22, 24);
+    color: rgb(187, 229, 236);
+    border: none;
+    border-radius: 3px;
+    pointer-events: none;
+    opacity: 0;
+  }
+  
+  .buttonc:hover {
+    background-color: rgb(211, 21, 21);
+  }
+  
+  .buttonc:active {
+    background-color: rgb(130, 0, 0);
+  }
+  
+  .buttonc:hover > .close {
+    animation: close 0.2s forwards 0.25s;
+  }
+  
+  @keyframes close {
+    100% {
+      opacity: 1;
+    }
+  }
+  .wrapper {
+    --font-color-dark: #b1cdd6;
+    --font-color-light: #b1cdd6;
+    --bg-color: #b1cdd6;
+    --main-color: #adb2b4;
+    position: relative;
+    width: 250px;
+    height: 36px;
+    background-color: var(--bg-color);
+    border: 2px solid var(--main-color);
+    border-radius: 34px;
+    display: flex;
+    flex-direction: row;
+    box-shadow: 4px 4px var(--main-color);
+  }
+  
+  .option {
+    width: 80.5px;
+    height: 28px;
+    position: relative;
+    top: 2px;
+    left: 2px;
+  }
+ 
+  
+  
+  
+  .user-table {
+    position:absolute;
+    top:35%;
+    left:20%;
+    margin:5px;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .user-table th,
+  .user-table td {
+    padding: 12px 15px;
+    text-align: left;
+  }
+  
+  .user-table th {
+    background-color: #666666;
+  }
+  
+  .user-table tbody tr:nth-child(even) {
+    background-color: #dfe6e4;
+  }
+  
+  .user-table tbody tr:hover {
+    background-color: #868686;
+  }
+  .Dbutton {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgb(20, 20, 20);
+    border: none;
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+    cursor: pointer;
+    transition-duration: 0.3s;
+    overflow: hidden;
+    position: relative;
+    gap: 1px;
+  }
+  
+  .svgIcon {
+    width: 12px;
+    transition-duration: 0.3s;
+  }
+  
+  .svgIcon path {
+    fill: white;
+  }
+  
+  .Dbutton:hover {
+    width: 90px;
+    border-radius: 50px;
+    transition-duration: 0.3s;
+    background-color: rgb(255, 69, 69);
+    align-items: center;
+    gap: 0;
+  }
+  
+  .Dbutton:hover .bin-bottom {
+    width: 50px;
+    transition-duration: 0.3s;
+    transform: translateY(60%);
+  }
+  .bin-top {
+    transform-origin: bottom right;
+  }
+  .Dbutton:hover .bin-top {
+    width: 50px;
+    transition-duration: 0.3s;
+    transform: translateY(60%) rotate(160deg);
+  }
+  .Dbutton::before {
+    position: absolute;
+    top: -20px;
+    content: "Delete";
+    color: white;
+    transition-duration: 0.3s;
+    font-size: 2px;
+  }
+  
+  .Dbutton:hover::before {
+    font-size: 13px;
+    opacity: 1;
+    transform: translateY(35px);
+    transition-duration: 0.3s;
+  }
+  .genre-pink{
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 20px;
+    padding: .3em 1.3em;
+    color: rgb(253, 9, 241);
+
+  }
+  .genre-blue{
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 20px;
+    padding: .3em 1.3em;
+    color: rgb(17, 14, 219);
+
+
+  }
+  .alluser{
+    position:relative;
+    top:10%;
+    color: rgb(17, 14, 219);
+
+  }
+  .sweetalert-container {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .sweetalert-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .sweetalert-html-container {
+    text-align: left;
+  }
+  .view-button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .view-button:hover {
+    background-color: #45a049; /* Darker green */
+  }

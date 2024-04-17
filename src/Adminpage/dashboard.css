@@ -1,0 +1,23 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.sidebar-left,
+.sidebar-right {
+  width: 200px;
+  background-color: #333;
+  color: #fff;
+}
+
+.main-content {
+  flex-grow: 1;
+  text-align: center; /* Center main content */
+}
+
+.footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+}

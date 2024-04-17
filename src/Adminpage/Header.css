@@ -1,0 +1,240 @@
+
+
+.search-container {
+  position: relative;
+  width: 100%;
+  border-radius: 50px;
+  background: linear-gradient(135deg, rgb(218, 232, 247) 0%, rgb(214, 229, 247) 100%);
+  padding: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.search-container::after, .search-container::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  position: absolute;
+}
+
+.search-container::before {
+  top: -1px;
+  left: -1px;
+  background: linear-gradient(0deg, rgb(218, 232, 247) 0%, rgb(255, 255, 255) 100%);
+  z-index: -1;
+}
+
+.search-container::after {
+  bottom: -1px;
+  right: -1px;
+  background: linear-gradient(0deg, rgb(163, 206, 255) 0%, rgb(211, 232, 255) 100%);
+  box-shadow: rgba(79, 156, 232, 0.7019607843) 3px 3px 5px 0px, rgba(79, 156, 232, 0.7019607843) 5px 5px 20px 0px;
+  z-index: -2;
+}
+
+.input {
+  padding: 5px 10px; /* Reduced vertical padding */
+  width: 150px; /* Reduced width */
+  background: linear-gradient(135deg, rgb(218, 232, 247) 0%, rgb(214, 229, 247) 100%);
+  border: none;
+  color: #1e1f1f;
+  font-size: 14px; /* Reduced font size */
+  border-radius: 50px;
+}
+
+.input:focus {
+  outline: none;
+  background: linear-gradient(135deg, rgb(239, 247, 255) 0%, rgb(214, 229, 247) 100%);
+}
+.search__icon {
+  width: 50px;
+  aspect-ratio: 1;
+  border-left: 2px solid white;
+  border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-radius: 50%;
+  padding-left: 12px;
+  margin-right: 10px;
+}
+
+.search__icon:hover {
+  border-left: 3px solid white;
+}
+
+.search__icon path {
+  fill: white;
+}
+.Btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: .3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color: rgb(5, 65, 65);
+}
+
+/* plus sign */
+.sign {
+  width: 100%;
+  transition-duration: .9s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign svg {
+  width: 17px;
+}
+
+.sign svg path {
+  fill: white;
+}
+/* text */
+.text {
+  position: absolute;
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  color: white;
+  font-size: 1.2em;
+  font-weight: 600;
+  transition-duration: .3s;
+}
+/* hover effect on button width */
+.cta {
+  position: relative;
+  margin-left: 25px;
+  margin-right: 20px;
+  padding: 10px 25px;
+  transition: all 0.2s ease;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.cta:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  border-radius: 50px;
+  background: #b1dae7;
+  width: 2px;
+  height: 55px;
+  transition: all 0.3s ease;
+}
+
+.cta span {
+  position: relative;
+  font-family: "Ubuntu", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+}
+
+.cta svg {
+  position: relative;
+  top: 0;
+  margin-left: 10px;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: #ffffff;
+  stroke-width: 2;
+  transform: translateX(-5px);
+  transition: all 0.3s ease;
+}
+
+.cta:hover:before {
+  width: 100%;
+  background: #b1dae7;
+}
+
+.cta:hover svg {
+  transform: translateX(0);
+}
+
+.cta:active {
+  transform: scale(0.95);
+}
+.navbar {
+  background-color: #212529; /* Dark background color */
+}
+
+.navbar-brand {
+  color: #fff; /* Text color */
+  font-weight: bold; /* Bold font weight */
+  font-size: 1.5rem;
+  margin-left: 10px; /* Larger font size */
+}
+
+.navbar-nav {
+  margin-left: 30%; /* Align items to the right */
+}
+
+.navbar-nav .nav-item {
+  margin-right: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Align items vertically */
+  text-align: center; /* Center text */
+}
+
+.navbar-nav .nav-link {
+  color: #fff; /* Text color */
+  font-size: 1rem; /* Font size */
+  transition: color 0.3s; /* Smooth color transition */
+  padding: 5px 0; /* Adjust vertical padding */
+}
+.navbar-nav .nav-link svg {
+  margin-bottom: 5px; /* Add space between icon and text */
+}
+.navbar-nav .nav-link:hover {
+  color: #ffc107; /* Change text color on hover */
+}
+
+.navbar-toggler {
+  border-color: #fff; /* Color of the toggle button */
+}
+
+.navbar-toggler-icon {
+  background-color: #fff; /* Color of the toggle button icon */
+}
+
+@media (max-width: 768px) {
+  .navbar-nav {
+    background-color: #343a40; /* Background color for collapsed navbar */
+    padding: 10px; /* Add padding for collapsed navbar */
+    border-radius: 5px; /* Rounded corners for collapsed navbar */
+  }
+}
+.user-menu {
+  top: 100%;
+  right: 0;
+  min-width: 150px;
+  z-index: 1000; /* Ensure the menu appears above other elements */
+}
+
+.user-menu ul {
+  padding: 0;
+}
+
+.user-menu li {
+  list-style: none;
+  margin-bottom: 5px;
+}
+
+.user-menu .btn {
+  width: 100%;
+  text-align: left;
+}
