@@ -3,7 +3,11 @@ import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { FaUsers } from 'react-icons/fa';
 import { MdCheckCircle, MdCancel } from 'react-icons/md';
-import { Button, Modal } from 'react-bootstrap'; // Import Button and Modal components from react-bootstrap
+import { Button, Modal } from 'react-bootstrap'; 
+/* src/index.css */
+// import '../Styles/tailwind.css';
+
+// Import Button and Modal components from react-bootstrap
 
 const Dashboard = () => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
@@ -95,7 +99,7 @@ const fetchUserPointings = async (userId) => {
 
   return (
     <div>
-      <div style={{ position: 'absolute', top: 80, right: 10, padding: '10px', display: 'flex' }}>
+      <div className="statique" >
         <div>
           <span style={{ marginRight: '20px' }}>
             <FaUsers style={{ fontSize: '24px' }} /> Total Users: {userCount}
@@ -120,8 +124,11 @@ const fetchUserPointings = async (userId) => {
         <table style={{ borderCollapse: 'collapse', width: '100%' }}>
           <thead>
             <tr>
+            <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Cin</th>
               <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>First Name</th>
               <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Last Name</th>
+              <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>email</th>
+              <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Tel</th>
               <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Status</th>
               <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Availability</th>
               <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Heurs travailler</th>
@@ -131,8 +138,11 @@ const fetchUserPointings = async (userId) => {
           <tbody>
             {allUsersData.map((user) => (
               <tr key={user.user_id} style={{ backgroundColor: 'white' }} onMouseOver={(e) => { e.target.parentNode.style.backgroundColor = '#f2f2f2'; }} onMouseOut={(e) => { e.target.parentNode.style.backgroundColor = 'white'; }}>
+                <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.cin}</td>
                 <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.firstname}</td>
                 <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.lastname}</td>
+                <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.email}</td>
+                <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.tel}</td>
                 <td style={{ border: '1px solid #ddd', padding: '8px', color: renderStatusColor(user.status) }}>{user.status}</td>
                 <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{renderAvailabilityIcon(user.availability)}</td>
                 <td style={{ border: '1px solid #ddd', padding: '8px', fontWeight: 'bold', color: 'black', textAlign: 'center' }}>{user.time_worked}</td>

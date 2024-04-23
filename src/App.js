@@ -4,7 +4,9 @@ import AuthComponent from './Auth/AuthComponent';
 import Dashboard from './Adminpage/Dashboard';
 import CreateUser from './Adminpage/CreateUser';
 import Conge from './Adminpage/Conge';
+import Motif from './Adminpage/Motif';
 import Layout from './Layout';
+import Fetchuser from './Adminpage/Fetchuser';
 
 
 const isAuthenticated = () => {
@@ -30,11 +32,15 @@ const App = () => {
 
         <Route
           path="/users/*"
-          element={<PrivateRoute element={<Layout><CreateUser /></Layout>} />}
+          element={<PrivateRoute element={<Layout><Fetchuser /></Layout>} />}
         />
         <Route
           path="/Conge/*"
           element={<PrivateRoute element={<Layout><Conge /></Layout>} />}
+        />
+        <Route
+          path="/motif/*"
+          element={<PrivateRoute element={<Layout><Motif /></Layout>} />}
         />
 
         {/* Add more routes as needed */}

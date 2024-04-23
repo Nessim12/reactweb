@@ -1,34 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Swal from 'sweetalert2';
 import { API_BASE_URL } from '../config';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import './Conge.css';
 
 const Conge = () => {
   const [demandes, setDemandes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refuseReason, setRefuseReason] = useState('');
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [viewReasonModalIsOpen, setViewReasonModalIsOpen] = useState(false);
+  const [selectedDemandeId, setSelectedDemandeId] = useState(null);
+
+  const fetchDemandes = async () => {
+    try {
+      const authToken = localStorage.getItem('authToken');
+      if (!authToken) {
+        throw new Error('Authentication token not found');
+      }
+
+      const response = await axios.get(`${API_BASE_URL}/api/admin/alldemande`, {
+        headers: {
+          Authorization: `Bearer ${authToken}`
+        }
+      });
+      setDemandes(response.data.demandes);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching demandes:', error.message);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchDemandes = async () => {
-      try {
-        const authToken = localStorage.getItem('authToken');
-        if (!authToken) {
-          throw new Error('Authentication token not found');
-        }
-
-        const response = await axios.get(`${API_BASE_URL}/api/admin/alldemande`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`
-          }
-        });
-        setDemandes(response.data.demandes);
-        // Simulate loading for 3 seconds
-        setTimeout(() => {
-          setLoading(false);
-        }, 500);
-      } catch (error) {
-        console.error('Error fetching demandes:', error.message);
-      }
-    };
-
     fetchDemandes();
   }, []);
 
@@ -39,70 +47,82 @@ const Conge = () => {
         throw new Error('Authentication token not found');
       }
 
-      const response = await axios.put(`${API_BASE_URL}/api/admin/updatedemande/${id}`, { status: 'accepter' }, {
+      await axios.put(`${API_BASE_URL}/api/admin/updatedemande/${id}`, { status: 'accepter' }, {
         headers: {
           Authorization: `Bearer ${authToken}`
         }
       });
 
-      // Update the demande in the local state
-      const updatedDemandes = demandes.map(demande => {
-        if (demande.id === id) {
-          demande.status = 'accepter';
-        }
-        return demande;
+      await fetchDemandes(); // Refresh demands after accepting
+      Swal.fire({
+        title: 'Demande Accepted',
+        text: 'The demande has been accepted.',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1500
       });
-      setDemandes(updatedDemandes);
-
-      console.log(response.data.message);
     } catch (error) {
       console.error('Error accepting demande:', error.message);
     }
   };
 
-  const handleRefuseDemande = async (id) => {
+  const handleRefuseDemande = async () => {
     try {
       const authToken = localStorage.getItem('authToken');
-      if (!authToken) {
-        throw new Error('Authentication token not found');
+      if (!authToken || !selectedDemandeId) {
+        throw new Error('Authentication token not found or invalid demande id');
       }
 
-      const response = await axios.put(`${API_BASE_URL}/api/admin/updatedemande/${id}`, { status: 'refuser' }, {
+      await axios.put(`${API_BASE_URL}/api/admin/updatedemande/${selectedDemandeId}`, { status: 'refuser', refuse_reason: refuseReason }, {
         headers: {
           Authorization: `Bearer ${authToken}`
         }
       });
 
-      // Update the demande in the local state
-      const updatedDemandes = demandes.map(demande => {
-        if (demande.id === id) {
-          demande.status = 'refuser';
-        }
-        return demande;
-      });
-      setDemandes(updatedDemandes);
-
-      console.log(response.data.message);
+      await fetchDemandes(); // Refresh demands after refusing
+      setModalIsOpen(false); // Close the refusal reason modal
+      setRefuseReason(''); // Clear refuse reason
     } catch (error) {
       console.error('Error refusing demande:', error.message);
     }
   };
 
+  const openRefuserModal = (id) => {
+    setSelectedDemandeId(id);
+    setModalIsOpen(true);
+  };
+
+  const openViewReasonModal = (reason) => {
+    setRefuseReason(reason);
+    setViewReasonModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setRefuseReason('');
+  };
+
+  const closeViewReasonModal = () => {
+    setViewReasonModalIsOpen(false);
+    setRefuseReason('');
+  };
+
   return (
-<div>
-      {loading ? ( // Show loading icon if data is still loading
+    <div className="conge-container">
+      {loading ? (
         <div>Loading...</div>
       ) : (
-        <div>
-          <table border={1} className="user-table">
+        <div className="table-container">
+          <table className="table table-striped">
             <thead>
               <tr>
                 <th>User</th>
-                <th>solde conge</th>
-                <th>Date début</th>
-                <th>Date fin</th>
+                <th>Solde Conge</th>
+                <th>Date Début</th>
+                <th>Date Fin</th>
                 <th>Motif</th>
-                <th>solde demandee</th>
+                <th>Description</th>
+                <th>Solde Demandée</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
@@ -114,15 +134,20 @@ const Conge = () => {
                   <td>{demande.user ? `${demande.user.soldecongée}` : ''}</td>
                   <td>{demande.date_d}</td>
                   <td>{demande.date_f}</td>
-                  <td>{demande.motif}</td>
+                  <td>{demande.motif ? demande.motif.motif_name : ''}</td>
+                  <td>{demande.description}</td>
                   <td>{demande.solde}</td>
                   <td>{demande.status}</td>
                   <td>
-                    {demande.status !== 'accepter' && demande.status !== 'refuser' && (
-                      <>
-                        <button onClick={() => handleAcceptDemande(demande.id)}>Accepter</button>
-                        <button onClick={() => handleRefuseDemande(demande.id)}>Refuser</button>
-                      </>
+                    {demande.status === 'refuser' ? (
+                      <button className="btn btn-view-reason" onClick={() => openViewReasonModal(demande.refuse_reason)}>View Reason</button>
+                    ) : demande.status === 'accepter' ? (
+                      <button className="btn btn-view-reasons" >Accepted</button>
+                    ) : (
+                      <div className="button-container">
+                        <button className="btn btn-accept" onClick={() => handleAcceptDemande(demande.id)}>Accepter</button>
+                        <button className="btn btn-refuse" onClick={() => openRefuserModal(demande.id)}>Refuser</button>
+                      </div>
                     )}
                   </td>
                 </tr>
@@ -131,6 +156,42 @@ const Conge = () => {
           </table>
         </div>
       )}
+
+      {/* Modal for entering refuse reason */}
+      <Modal show={modalIsOpen} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Refuse Demande</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group controlId="refuseReason">
+            <Form.Label>Enter refuse reason:</Form.Label>
+            <Form.Control as="textarea" value={refuseReason} onChange={(e) => setRefuseReason(e.target.value)} />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeModal}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleRefuseDemande}>
+            Confirm Refusal
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal for viewing refusal reason */}
+      <Modal show={viewReasonModalIsOpen} onHide={closeViewReasonModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Refusal Reason</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>{refuseReason}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeViewReasonModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

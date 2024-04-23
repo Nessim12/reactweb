@@ -70,9 +70,9 @@ const Header = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/Conge"><FaCalendarAlt /> Conge</Link>
             </li>
-            {/* <li className="nav-item">
-            <Link className="nav-link" to="/drawer"><FaCalendarAlt /> Drawer</Link>
-            </li> */}
+            <li className="nav-item">
+            <Link className="nav-link" to="/motif"><FaCalendarAlt /> Motif</Link>
+            </li>
           </ul>
           <div className="d-flex align-items-center">
             <div className="search-container me-3">
