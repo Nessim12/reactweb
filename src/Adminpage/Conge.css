@@ -5,30 +5,34 @@
     width: 100%;
     margin-top: 20px;
   }
+.conge-container{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
   
   .table {
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
   }
+  .usetab{
+    text-align: center;
+    font-size: 19px;
+    color: black;
+    padding: 3px 40px;
+    display:inline-block;
+  }
   
   .table th,
+  
   .table td {
     padding: 12px;
     text-align: left;
     vertical-align: middle;
     border-top: 1px solid #dee2e6;
   }
-  
-  .table th {
-    background-color: #f8f9fa;
-    color: #343a40;
-    font-weight: bold;
-  }
-  
-  .table-striped tbody tr:nth-of-type(odd) {
-    background-color: #f8f9fa;
-  }
+
   
   /* Button Styles */
   .button-container {
@@ -128,5 +132,62 @@
     height: 200px;
     font-size: 16px;
     color: #333;
+  }
+  .filter-buttons select {
+    width: 200px; /* Set the width of the select */
+    padding: 10px;
+    margin-left: -170px; /* Add padding for better spacing */
+    font-size: 16px; /* Adjust the font size */
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 5px; /* Add border radius for rounded corners */
+    appearance: none; /* Remove default arrow icon */
+    background-color: #f2f2f2; /* Set background color */
+    color: #333; /* Set text color */
+  }
+  
+  /* Style when select element is hovered */
+  .filter-buttons select:hover {
+    background-color: #e0e0e0; /* Change background color */
+  }
+  
+  /* Style when select element is focused */
+  .filter-buttons select:focus {
+    outline: none; /* Remove default focus outline */
+    border-color: #007bff; /* Change border color */
+  }
+  
+  /* Style the dropdown arrow */
+  .filter-buttons select::-ms-expand {
+    display: none; /* Hide default arrow icon in IE */
+  }
+  .filter-buttons select::before,
+  .filter-buttons select::after {
+    content: ''; /* Hide default arrow icon */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    pointer-events: none;
+  }
+  
+  .filter-buttons select::before {
+    border-top-color: #555; /* Arrow color when not focused */
+  }
+  
+  .filter-buttons select:focus::before {
+    border-top-color: #007bff; /* Arrow color when focused */
+  }
+  
+  /* Style the options */
+  .filter-buttons select option {
+    background-color: #f2f2f2; /* Set background color */
+    color: #333; /* Set text color */
+  }
+  
+  /* Style when option is hovered */
+  .filter-buttons select option:hover {
+    background-color: #e0e0e0; /* Change background color */
   }
   

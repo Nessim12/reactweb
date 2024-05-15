@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { Button, Table, Modal, Form } from 'react-bootstrap';
-import Swal from 'sweetalert2'; // Import SweetAlert
+import Swal from 'sweetalert2';
+import './Conge.css';
 
 const Motif = () => {
   const [motifs, setMotifs] = useState([]);
@@ -11,6 +12,7 @@ const Motif = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editMotifId, setEditMotifId] = useState(null);
   const [editMotifName, setEditMotifName] = useState('');
+  const [showMotifTable, setShowMotifTable] = useState(false); // State variable for toggling table visibility
 
   useEffect(() => {
     fetchMotifs();
@@ -117,37 +119,50 @@ const Motif = () => {
       <h2>Motifs</h2>
       {error && <p>{error}</p>}
 
-      <Button variant="primary" onClick={() => setShowAddModal(true)}>Add Motif</Button>
+      <Button variant="primary" onClick={() => setShowAddModal(true)}>Ajoutez Motif</Button>
+      <Button variant="info" style={{ marginLeft: '10px' }} onClick={() => setShowMotifTable(true)}>Gérer motifs</Button> {/* Show motifs table in modal */}
 
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {motifs.map((motif, index) => (
-            <tr key={motif.id}>
-              <td>{index + 1}</td>
-              <td>{motif.motif_name}</td>
-              <td>
-                <Button variant="info" onClick={() => openEditModal(motif.id, motif.motif_name)}>Edit</Button>
-                <Button variant="danger" onClick={() => handleDeleteMotif(motif.id)}>Delete</Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <Modal show={showMotifTable} onHide={() => setShowMotifTable(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Liste des motifs</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div style={{ overflowY: 'auto', maxHeight: '400px' }}>
+            <Table bordered hover responsive>
+              <thead>
+                <tr>
+                  <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>#</th>
+                  <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Name</th>
+                  <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {motifs.map((motif, index) => (
+                  <tr key={motif.id} style={{ backgroundColor: (index + 1) % 4 === 2 || (index + 1) % 4 === 0 ? '#f2f2f2' : 'white' }}>
+                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>{index + 1}</td>
+                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>{motif.motif_name}</td>
+                    <td>
+                      <Button variant="info" onClick={() => openEditModal(motif.id, motif.motif_name)}>Modifier</Button>
+                      <Button variant="danger" onClick={() => handleDeleteMotif(motif.id)}>Supprimer</Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowMotifTable(false)}>Fermer</Button>
+        </Modal.Footer>
+      </Modal>
 
       <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Motif</Modal.Title>
+          <Modal.Title>Ajoutez Motif</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Group>
-            <Form.Label>Motif Name</Form.Label>
+            <Form.Label>Motif </Form.Label>
             <Form.Control
               type="text"
               value={newMotifName}
@@ -156,18 +171,18 @@ const Motif = () => {
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowAddModal(false)}>Close</Button>
-          <Button variant="primary" onClick={handleAddMotif}>Save</Button>
+          <Button variant="secondary" onClick={() => setShowAddModal(false)}>Fermer</Button>
+          <Button variant="primary" onClick={handleAddMotif}>Enregistrer</Button>
         </Modal.Footer>
       </Modal>
 
       <Modal show={!!editMotifId} onHide={closeEditModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit Motif</Modal.Title>
+          <Modal.Title>Modifier Motif</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Group>
-            <Form.Label>Motif Name</Form.Label>
+            <Form.Label>Motif </Form.Label>
             <Form.Control
               type="text"
               value={editMotifName}
@@ -176,8 +191,8 @@ const Motif = () => {
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={closeEditModal}>Close</Button>
-          <Button variant="primary" onClick={handleEditMotif}>Save</Button>
+          <Button variant="secondary" onClick={closeEditModal}>Fermer</Button>
+          <Button variant="primary" onClick={handleEditMotif}>Enregistrer</Button>
         </Modal.Footer>
       </Modal>
     </div>

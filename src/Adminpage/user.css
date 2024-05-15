@@ -1,13 +1,6 @@
 /* user.css */
 
 /* Styling for User Container */
-.user-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-}
-
 /* Styling for Search Input */
 input[type="text"] {
   width: 100%;
@@ -110,4 +103,17 @@ button {
 
 .modal-footer .btn-primary:hover {
   background-color: #0056b3;
+}
+/* Styling for User Container */
+.user-container {
+  width: 120%; /* Adjust the width of the user container as needed */
+}
+
+/* Styling for Table */
+.usetab{
+  text-align: center;
+  font-size: 19px;
+  color: black;
+  padding: 3px 40px;
+  display:inline-block;
 }

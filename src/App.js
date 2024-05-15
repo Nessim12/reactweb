@@ -7,6 +7,7 @@ import Conge from './Adminpage/Conge';
 import Motif from './Adminpage/Motif';
 import Layout from './Layout';
 import Fetchuser from './Adminpage/Fetchuser';
+import Workonline from './Adminpage/Workonline';
 
 
 const isAuthenticated = () => {
@@ -39,8 +40,8 @@ const App = () => {
           element={<PrivateRoute element={<Layout><Conge /></Layout>} />}
         />
         <Route
-          path="/motif/*"
-          element={<PrivateRoute element={<Layout><Motif /></Layout>} />}
+          path="/Demanderemote/*"
+          element={<PrivateRoute element={<Layout><Workonline /></Layout>} />}
         />
 
         {/* Add more routes as needed */}

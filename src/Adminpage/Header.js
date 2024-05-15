@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import axios from 'axios'; // Import axios for API requests
 import { BsPerson, BsHouseDoor, BsPeople } from 'react-icons/bs';
-import { FaCalendarAlt } from "react-icons/fa"; // Import Bootstrap icons
+import { FaCalendarAlt } from "react-icons/fa";
+import { MdDateRange } from "react-icons/md";
+import { RiRemoteControlFill } from "react-icons/ri"; // Import Bootstrap icons
 import "./Header.css";
 
 const Header = () => {
@@ -62,16 +64,16 @@ const Header = () => {
         <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}>
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="nav-link" to="/Dashboard"><BsHouseDoor /> Home</Link>
+              <Link className="nav-link" to="/Dashboard"><BsHouseDoor /> Acceuil</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/users"><BsPeople /> Users</Link>
+              <Link className="nav-link" to="/users"><BsPeople /> Utilisateurs</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/Conge"><FaCalendarAlt /> Conge</Link>
+              <Link className="nav-link" to="/Conge"><FaCalendarAlt /> Congés</Link>
             </li>
             <li className="nav-item">
-            <Link className="nav-link" to="/motif"><FaCalendarAlt /> Motif</Link>
+            <Link className="nav-link" to="/Demanderemote"><RiRemoteControlFill /> DemandeRemote</Link>
             </li>
           </ul>
           <div className="d-flex align-items-center">
@@ -85,7 +87,7 @@ const Header = () => {
                   <ul className="list-unstyled">
                     <li className="mb-2">
                       <button className="btn btn-danger" onClick={handleLogout}>
-                        Logout
+                        Déconnecter
                       </button>
                     </li>
                     {/* Add other menu items here */}

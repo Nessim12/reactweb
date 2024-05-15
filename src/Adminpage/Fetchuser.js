@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { API_BASE_URL } from '../config';
-import { MdDelete, MdEdit } from 'react-icons/md';
+import {  MdDeleteForever  } from 'react-icons/md';
 import { Button, Modal, Form } from 'react-bootstrap';
+import { FaUserEdit } from "react-icons/fa";
 import './user.css';
+import { IoManSharp, IoWomanOutline  } from "react-icons/io5";
+import { MdPlace } from "react-icons/md";
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -12,7 +15,7 @@ const UserManagement = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [usersPerPage] = useState(4);
+  const [usersPerPage] = useState(5);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     cin: '',
@@ -236,106 +239,148 @@ const UserManagement = () => {
 
   return (
     <div className="user-container">
-      <input
-        type="text"
-        placeholder="Search by name or email"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <Button variant="primary" onClick={() => setShowModal(true)} style={{ marginBottom: '10px' }}>
-        Add User
-      </Button>
+      
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+        <input
+          type="text"
+          placeholder="Search by name or email"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ width: '200px' }}
+        />
+                <Button  onClick={() => setShowModal(true)} style={{ marginRight: '220px',borderRadius:'30px', backgroundColor:'#025E73' }}>
+          Ajouter Employée
+        </Button>
+      </div>
 
-      <Modal show={showModal} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>{editingUser ? 'Edit User' : 'Add New User'}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="cin">
-              <Form.Label>CIN</Form.Label>
-              <Form.Control type="text" name="cin" value={formData.cin} onChange={handleInputChange} />
-            </Form.Group>
-            <Form.Group controlId="firstname">
-              <Form.Label>First Name</Form.Label>
-              <Form.Control type="text" name="firstname" value={formData.firstname} onChange={handleInputChange} />
-            </Form.Group>
-            <Form.Group controlId="lastname">
-              <Form.Label>Last Name</Form.Label>
-              <Form.Control type="text" name="lastname" value={formData.lastname} onChange={handleInputChange} />
-            </Form.Group>
-            <Form.Group controlId="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="email" name="email" value={formData.email} onChange={handleInputChange} />
-            </Form.Group>
-            <Form.Group controlId="tel">
-              <Form.Label>Phone Number</Form.Label>
-              <Form.Control type="text" name="tel" value={formData.tel} onChange={handleInputChange} />
-            </Form.Group>
-            <Form.Group controlId="adresse">
-              <Form.Label>Address</Form.Label>
-              <Form.Control type="text" name="adresse" value={formData.adresse} onChange={handleInputChange} />
-            </Form.Group>
-            <Form.Group controlId="genre">
-              <Form.Label>Gender</Form.Label>
-              <Form.Control as="select" name="genre" value={formData.genre} onChange={handleInputChange}>
-                <option value="men">Men</option>
-                <option value="women">Women</option>
-              </Form.Control>
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>Close</Button>
-          <Button variant="primary" onClick={editingUser ? handleUpdateUser : handleAddUser}>
-            {editingUser ? 'Update User' : 'Add User'}
-          </Button>
-        </Modal.Footer>
-      </Modal>
 
-      <table className="user-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>CIN</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Phone Number</th>
-            <th>Address</th>
-            <th>Gender</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentUsers.map((user, index) => (
-            <tr key={user.id}>
-              <td>{indexOfFirstUser + index + 1}</td>
-              <td>{user.cin}</td>
-              <td>{user.firstname}</td>
-              <td>{user.lastname}</td>
-              <td>{user.email}</td>
-              <td>{user.tel}</td>
-              <td>{user.adresse}</td>
-              <td>{user.genre}</td>
-              <td>
-                <MdEdit className="edit-button" onClick={() => handleEditUser(user)} />
-                <MdDelete className="delete-button" onClick={() => handleDeleteUser(user.id)} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Modal show={showModal} onHide={handleClose} centered>
+      <Modal.Header closeButton style={{ backgroundColor: '#90AFC5', color: 'white', borderBottom: 'none' }}>
+    <Modal.Title>{editingUser ? 'Update Employée' : 'Ajouter Employée'}</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <Form>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <Form.Group controlId="cin">
+            <Form.Label>CIN</Form.Label>
+            <Form.Control type="text" name="cin" placeholder="Enter CIN" value={formData.cin} onChange={handleInputChange} />
+          </Form.Group>
+          <Form.Group controlId="email">
+            <Form.Label>Email</Form.Label>
+            <Form.Control type="email" name="email" placeholder="Enter Email" value={formData.email} onChange={handleInputChange} />
+          </Form.Group>
+        </div>
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <Form.Group controlId="lastname">
+            <Form.Label>Prenom</Form.Label>
+            <Form.Control type="text" name="lastname" placeholder="Enter Prenom" value={formData.lastname} onChange={handleInputChange} />
+          </Form.Group>
+          <Form.Group controlId="firstname">
+            <Form.Label>Nom</Form.Label>
+            <Form.Control type="text" name="firstname" placeholder="Enter Nom" value={formData.firstname} onChange={handleInputChange} />
+          </Form.Group>
+        </div>
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <Form.Group controlId="tel">
+            <Form.Label>Phone Number</Form.Label>
+            <Form.Control type="text" name="tel" placeholder="Enter Phone Number" value={formData.tel} onChange={handleInputChange} />
+          </Form.Group>
+          <Form.Group controlId="adresse">
+            <Form.Label>Address</Form.Label>
+            <Form.Control type="text" name="adresse" placeholder="Enter Address" value={formData.adresse} onChange={handleInputChange} />
+          </Form.Group>
+        </div>
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <Form.Group controlId="genre">
+            <Form.Label>Gender</Form.Label>
+            <Form.Control as="select" name="genre" value={formData.genre} onChange={handleInputChange}>
+              <option value="men">Men</option>
+              <option value="women">Women</option>
+            </Form.Control>
+          </Form.Group>
+        </div>
+      </div>
+    </Form>
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={handleClose}>Close</Button>
+    <Button variant="primary" onClick={editingUser ? handleUpdateUser : handleAddUser}>
+      {editingUser ? 'Update User' : 'Ajouter'}
+    </Button>
+  </Modal.Footer>
+</Modal>
+
+
+
+<div style={{ marginTop: '20px', overflowY: 'auto', maxHeight: '400px' }}>
+<table className="usetab" style={{ borderCollapse: 'collapse', width: '100%' }}>
+  <thead>
+    <tr>
+      <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>#</th>
+      <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Cin</th>
+      <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Prénom</th>
+      <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Nom de famille</th>
+      <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black', width: '300px' }}>email</th>
+      <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Téléphone</th>
+      <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Address</th>
+      <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Gender</th>
+      <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {currentUsers.map((user, index) => (
+      <tr key={user.user_id} style={{ backgroundColor: (index + 1) % 4 === 2 || (index + 1) % 4 === 0 ? '#f2f2f2' : 'white' }} >
+        <td style={{ border: '1px solid #ddd', padding: '8px' }}>{indexOfFirstUser + index + 1}</td>
+        <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.cin}</td>
+        <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.firstname}</td>
+        <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.lastname}</td>
+        <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.email}</td>
+        <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.tel}</td>
+        <td style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: (index + 1) % 4 === 2 || (index + 1) % 4 === 0 ? '#f2f2f2' : 'white' }}>
+        <MdPlace />
+  <span style={{ marginRight: '5px', flex: '1',fontSize:'16px' }}>{user.adresse}</span>
+
+</td>
+        <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+  <button style={{ 
+    backgroundColor: '#3498db', // Blue for men
+    color: 'white', 
+    padding: '8px 15px', 
+    borderRadius: '20px', 
+    border: 'none', 
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '5px',
+    fontSize: '15px'
+  }}>
+    {user.genre === 'men' ? <IoManSharp style={{ color: 'white',padding:'1px' }} /> : <IoWomanOutline  style={{ color: 'white' }} />}
+    {user.genre === 'men' ? 'Men   ' : 'Women'}
+  </button>
+</td>
+        <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+          <FaUserEdit className="edit-button" onClick={() => handleEditUser(user)} style={{ margin:'3px' }} />
+          <MdDeleteForever  className="delete-button" onClick={() => handleDeleteUser(user.id)} style={{ margin:'3px' }}/>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
 
       <div className="pagination">
-        {Array.from({ length: Math.ceil(filteredUsers.length / usersPerPage) }, (_, i) => (
-          <button key={i + 1} onClick={() => paginate(i + 1)}>
-            {i + 1}
-          </button>
-        ))}
+          {Array.from({ length: Math.ceil(filteredUsers.length / usersPerPage) }, (_, i) => (
+            <button key={i + 1} onClick={() => paginate(i + 1)} style={{ backgroundColor: currentPage === i + 1 ? 'lightblue' : 'white' }}>
+              {i + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
+
 export default UserManagement;
+
