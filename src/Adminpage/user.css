@@ -74,7 +74,7 @@ button {
 
 /* Styling for Modal Header */
 .modal-header {
-  background-color: #007bff;
+  background-color: #90AFC5;
   color: #fff;
   border-radius: 8px 8px 0 0;
 }
@@ -116,4 +116,53 @@ button {
   color: black;
   padding: 3px 40px;
   display:inline-block;
+}
+/* Style the form row to display elements inline */
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px; /* Adjust the gap as needed */
+}
+
+/* Style the form groups inline */
+.form-group-inline {
+  flex: 1;
+}
+
+/* Style the select elements */
+.styled-select {
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 5px; /* Add some top margin for label spacing */
+}
+
+/* Style the button */
+.styled-button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+}
+
+/* Style the result container */
+.result-container {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+/* Style present and absent days */
+.present-days {
+  color: green;
+}
+
+.absent-days {
+  color: red;
+}
+
+/* Style the placeholder text */
+.placeholder-text {
+  text-align: center;
+  margin-top: 20px;
 }

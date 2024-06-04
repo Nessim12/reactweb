@@ -16,7 +16,6 @@ const AuthComponent = () => {
 
   return (
     <div className="Auth">
-      <h2>Sign in </h2>
       <div className={containerClass} id="container">
         <SignInForm />
         <div className="overlay-container">
@@ -29,8 +28,8 @@ const AuthComponent = () => {
               </button>
             </div>
             <div className="overlay-panel overlay-right">
-              <h1>Hello, Admin!</h1>
-              <p>Enter your personal details and start journey with us</p>
+              <h1>Bonjour,Directeur!</h1>
+              <p>Entrez vos coordonnées personnelles</p>
               
             </div>
           </div>

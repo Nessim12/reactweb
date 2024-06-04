@@ -139,7 +139,8 @@
 }
 
 .navbar-nav {
-  margin-left: 20%; /* Align items to the right */
+  margin: auto; /* Center-align the navbar items */
+  display: flex; /* Ensure the items are displayed as flex items */
 }
 
 .navbar-nav .nav-item {

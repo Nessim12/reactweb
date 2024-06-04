@@ -52,7 +52,7 @@ const Header = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div className="container-fluid">
-        <a className="navbar-brand">DEV WEB</a>
+        <a className="navbar-brand">RH_web</a>
         <button
           className="navbar-toggler"
           type="button"
@@ -77,11 +77,9 @@ const Header = () => {
             </li>
           </ul>
           <div className="d-flex align-items-center">
-            <div className="search-container me-3">
-              <input className="input form-control form-control-sm" type="text" placeholder="Search.." />
-            </div>
+            <span className="text-white me-3">Bonjour, RH</span>
             <div className="position-relative" ref={menuRef}>
-              <BsPerson size={50} color="white" className="me-3" onClick={handleMenuToggle} />
+              <BsPerson size={50} color="white" onClick={handleMenuToggle} />
               {isMenuOpen && (
                 <div className="user-menu position-absolute bg-dark p-2 rounded">
                   <ul className="list-unstyled">

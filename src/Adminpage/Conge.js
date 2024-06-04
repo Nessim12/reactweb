@@ -8,6 +8,7 @@ import { API_BASE_URL } from '../config';
 import { FaCalendarAlt, FaCheckCircle, FaTimesCircle, FaPlayCircle } from 'react-icons/fa';
 import Motif from './Motif';
 import './Conge.css';
+import Holiday from './Holiday';
 
 const Conge = () => {
   const [demandes, setDemandes] = useState([]);
@@ -220,7 +221,7 @@ const Conge = () => {
                       {demande.status === 'refuser' ? (
                         <button className="btn btn-view-reason" onClick={() => openViewReasonModal(demande.refuse_reason)}>Voir la raison</button>
                       ) : demande.status === 'accepter' ? (
-                        <button className="btn btn-view-reasons">Acceptée</button>
+                        <span ></span>
                       ) : (
                         <div className="button-container">
                           <button className="btn btn-accept" onClick={() => handleAcceptDemande(demande.id)}>Accepter</button>
@@ -240,9 +241,19 @@ const Conge = () => {
               </button>
             ))}
           </div>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',marginBottom:'30px'}}>
-        <Motif />
-      </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '70px', marginLeft: '50px', marginRight: '50px' }}>
+  <div>
+    <Motif />
+  </div>
+  <div>
+    <Holiday />
+  </div>
+</div>
+
+
+
+      
+
         </div>
         
       )}

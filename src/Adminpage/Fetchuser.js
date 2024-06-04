@@ -8,6 +8,10 @@ import { FaUserEdit } from "react-icons/fa";
 import './user.css';
 import { IoManSharp, IoWomanOutline  } from "react-icons/io5";
 import { MdPlace } from "react-icons/md";
+import { Doughnut} from 'react-chartjs-2';
+import { FaEye } from 'react-icons/fa';
+import { Formik, Field, Form as FormikForm, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -17,6 +21,8 @@ const UserManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(5);
   const [showModal, setShowModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [detailsData, setDetailsData] = useState(null);
   const [formData, setFormData] = useState({
     cin: '',
     firstname: '',
@@ -27,6 +33,19 @@ const UserManagement = () => {
     genre: 'men'
   });
   const [editingUser, setEditingUser] = useState(null);
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [monthlyWorkTimes, setMonthlyWorkTimes] = useState(null);
+  const [chartData, setChartData] = useState({
+    labels: ['Men', 'Women'],
+    datasets: [
+      {
+        data: [0, 0],
+        backgroundColor: ['#3498db', '#e74c3c']
+      }
+    ]
+  });
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -60,7 +79,42 @@ const UserManagement = () => {
       user.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredUsers(filteredResults);
+    const menCount = users.filter(user => user.genre === 'men').length;
+    const womenCount = users.filter(user => user.genre === 'women').length;
+
+    setChartData({
+      labels: ['Men', 'Women'],
+      datasets: [
+        {
+          data: [menCount, womenCount],
+          backgroundColor: ['#3498db', '#e74c3c']
+        }
+      ]
+    });
   }, [users, searchTerm]);
+
+  const fetchMonthlyWorkTimes = async () => {
+    try {
+      const authToken = localStorage.getItem('authToken');
+      if (!authToken) {
+        throw new Error('Authentication token not found');
+      }
+
+      const response = await axios.post(`${API_BASE_URL}/api/admin/getUserDailyWorkTime/${selectedUser.id}`, {
+        month,
+        year
+      }, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+
+      setMonthlyWorkTimes(response.data);
+    } catch (error) {
+      console.error('Error fetching monthly work times:', error.message);
+    }
+  };
+
 
   const handleDeleteUser = async (id) => {
     try {
@@ -93,7 +147,7 @@ const UserManagement = () => {
         Swal.fire({
           icon: 'success',
           title: 'User Deleted',
-          text: 'User has been deleted successfully!'
+          text: "L'utilisateur a été supprimé avec succès !"
         });
       }
     } catch (error) {
@@ -101,33 +155,48 @@ const UserManagement = () => {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Failed to delete user. Please try again.'
+        text: "Échec de la suppression de l'utilisateur. Veuillez réessayer."
       });
     }
   };
+  const validationSchema = Yup.object().shape({
+    cin: Yup.string()
+      .length(8, 'Le CIN doit comporter exactement 8 caractères')
+      .required('Le CIN est obligatoire'),
+    firstname: Yup.string().required('Le prénom est obligatoire'),
+    lastname: Yup.string().required('Le nom est obligatoire'),
+    email: Yup.string().email('Adresse email invalide').required('L\'email est obligatoire'),
+    tel: Yup.string()
+      .matches(/^[0-9]+$/, 'Le numéro de téléphone doit contenir uniquement des chiffres')
+      .required('Le numéro de téléphone est obligatoire'),
+    adresse: Yup.string().required('L\'adresse est obligatoire'),
+    genre: Yup.string().required('Le genre est obligatoire')
+  });
+  
+  
 
-  const handleAddUser = async () => {
+  const handleAddUser = async (values) => {
     try {
       const authToken = localStorage.getItem('authToken');
       if (!authToken) {
         throw new Error('Authentication token not found');
       }
-
-      const response = await axios.post(`${API_BASE_URL}/api/admin/adduser`, formData, {
+  
+      const response = await axios.post(`${API_BASE_URL}/api/admin/adduser`, values, {
         headers: {
           Authorization: `Bearer ${authToken}`
         }
       });
-
+  
       const { user } = response.data;
       setUsers([...users, user]);
-
+  
       Swal.fire({
         icon: 'success',
         title: 'User Added',
-        text: 'New user has been added successfully!'
+        text: "Le nouvel utilisateur a été ajouté avec succès !"
       });
-
+  
       setShowModal(false);
       setFormData({
         cin: '',
@@ -140,38 +209,38 @@ const UserManagement = () => {
       });
     } catch (error) {
       console.error('Error adding user:', error.message);
-
+  
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Failed to add new user. Please try again.'
+        text: "Échec de l'ajout du nouvel utilisateur. Veuillez réessayer."
       });
     }
   };
-
-  const handleUpdateUser = async () => {
+  
+  const handleUpdateUser = async (values) => {
     try {
       const authToken = localStorage.getItem('authToken');
       if (!authToken) {
         throw new Error('Authentication token not found');
       }
-
-      const response = await axios.put(`${API_BASE_URL}/api/admin/updateuser/${editingUser.id}`, formData, {
+  
+      const response = await axios.put(`${API_BASE_URL}/api/admin/updateuser/${editingUser.id}`, values, {
         headers: {
           Authorization: `Bearer ${authToken}`
         }
       });
-
+  
       const updatedUser = response.data.user;
       const updatedUsers = users.map(user => (user.id === updatedUser.id ? updatedUser : user));
       setUsers(updatedUsers);
-
+  
       Swal.fire({
         icon: 'success',
-        title: 'User Updated',
-        text: 'User information has been updated successfully!'
+        title: 'User Modifier',
+        text: "Les informations de l'utilisateur ont été mises à jour avec succès !"
       });
-
+  
       setShowModal(false);
       setFormData({
         cin: '',
@@ -185,11 +254,11 @@ const UserManagement = () => {
       setEditingUser(null);
     } catch (error) {
       console.error('Error updating user:', error.message);
-
+  
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Failed to update user. Please try again.'
+        text: 'Failed to Modifier user. Please try again.'
       });
     }
   };
@@ -226,6 +295,18 @@ const UserManagement = () => {
     });
     setEditingUser(null);
   };
+  const handleShowDetailsModal = (user) => {
+    setSelectedUser(user);
+    setShowDetailsModal(true);
+    setMonthlyWorkTimes(null); // Reset monthly work times when modal opens
+  };
+
+  const handleDetailsModalClose = () => {
+    setShowDetailsModal(false);
+    setSelectedUser(null);
+    setMonth(new Date().getMonth() + 1);
+    setYear(new Date().getFullYear());
+  };
 
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
@@ -239,8 +320,23 @@ const UserManagement = () => {
 
   return (
     <div className="user-container">
-      
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+       <div className="statique">
+        <div className="chartContainer">
+
+          <Doughnut data={chartData}
+          options={{
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                labels: {
+                  fontSize: 10,
+                  usePointStyle: true,}}}}}
+          />
+
+          </div>
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px',marginTop:'200px' }}>
         <input
           type="text"
           placeholder="Search by name or email"
@@ -255,63 +351,139 @@ const UserManagement = () => {
 
 
       <Modal show={showModal} onHide={handleClose} centered>
-      <Modal.Header closeButton style={{ backgroundColor: '#90AFC5', color: 'white', borderBottom: 'none' }}>
-    <Modal.Title>{editingUser ? 'Update Employée' : 'Ajouter Employée'}</Modal.Title>
+  <Modal.Header closeButton style={{ backgroundColor: '#90AFC5', color: 'white', borderBottom: 'none' }}>
+    <Modal.Title>{editingUser ? 'Modifier Employée' : 'Ajouter Employée'}</Modal.Title>
   </Modal.Header>
   <Modal.Body>
-    <Form>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <Form.Group controlId="cin">
-            <Form.Label>CIN</Form.Label>
-            <Form.Control type="text" name="cin" placeholder="Enter CIN" value={formData.cin} onChange={handleInputChange} />
-          </Form.Group>
-          <Form.Group controlId="email">
-            <Form.Label>Email</Form.Label>
-            <Form.Control type="email" name="email" placeholder="Enter Email" value={formData.email} onChange={handleInputChange} />
-          </Form.Group>
-        </div>
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <Form.Group controlId="lastname">
-            <Form.Label>Prenom</Form.Label>
-            <Form.Control type="text" name="lastname" placeholder="Enter Prenom" value={formData.lastname} onChange={handleInputChange} />
-          </Form.Group>
-          <Form.Group controlId="firstname">
-            <Form.Label>Nom</Form.Label>
-            <Form.Control type="text" name="firstname" placeholder="Enter Nom" value={formData.firstname} onChange={handleInputChange} />
-          </Form.Group>
-        </div>
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <Form.Group controlId="tel">
-            <Form.Label>Phone Number</Form.Label>
-            <Form.Control type="text" name="tel" placeholder="Enter Phone Number" value={formData.tel} onChange={handleInputChange} />
-          </Form.Group>
-          <Form.Group controlId="adresse">
-            <Form.Label>Address</Form.Label>
-            <Form.Control type="text" name="adresse" placeholder="Enter Address" value={formData.adresse} onChange={handleInputChange} />
-          </Form.Group>
-        </div>
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <Form.Group controlId="genre">
-            <Form.Label>Gender</Form.Label>
-            <Form.Control as="select" name="genre" value={formData.genre} onChange={handleInputChange}>
-              <option value="men">Men</option>
-              <option value="women">Women</option>
-            </Form.Control>
-          </Form.Group>
-        </div>
-      </div>
-    </Form>
+    <Formik
+      initialValues={formData}
+      validationSchema={validationSchema}
+      onSubmit={(values, { setSubmitting }) => {
+        editingUser ? handleUpdateUser(values) : handleAddUser(values);
+        setSubmitting(false);
+      }}
+    >
+      {({ isSubmitting }) => (
+        <FormikForm>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', gap: '20px' }}>
+              <Form.Group controlId="cin">
+                <Form.Label>CIN</Form.Label>
+                <Field type="text" name="cin" className="form-control" placeholder="Enter CIN" />
+                <ErrorMessage name="cin" component="div" className="text-danger" />
+              </Form.Group>
+              <Form.Group controlId="email">
+                <Form.Label>Email</Form.Label>
+                <Field type="email" name="email" className="form-control" placeholder="Enter Email" />
+                <ErrorMessage name="email" component="div" className="text-danger" />
+              </Form.Group>
+            </div>
+            <div style={{ display: 'flex', gap: '20px' }}>
+              <Form.Group controlId="lastname">
+                <Form.Label>Prenom</Form.Label>
+                <Field type="text" name="lastname" className="form-control" placeholder="Enter Prenom" />
+                <ErrorMessage name="lastname" component="div" className="text-danger" />
+              </Form.Group>
+              <Form.Group controlId="firstname">
+                <Form.Label>Nom</Form.Label>
+                <Field type="text" name="firstname" className="form-control" placeholder="Enter Nom" />
+                <ErrorMessage name="firstname" component="div" className="text-danger" />
+              </Form.Group>
+            </div>
+            <div style={{ display: 'flex', gap: '20px' }}>
+              <Form.Group controlId="tel">
+                <Form.Label>Phone Number</Form.Label>
+                <Field type="text" name="tel" className="form-control" placeholder="Enter Phone Number" />
+                <ErrorMessage name="tel" component="div" className="text-danger" />
+              </Form.Group>
+              <Form.Group controlId="adresse">
+                <Form.Label>Address</Form.Label>
+                <Field type="text" name="adresse" className="form-control" placeholder="Enter Address" />
+                <ErrorMessage name="adresse" component="div" className="text-danger" />
+              </Form.Group>
+            </div>
+            <div style={{ display: 'flex', gap: '20px' }}>
+              <Form.Group controlId="genre">
+                <Form.Label>Genre</Form.Label>
+                <Field as="select" name="genre" className="form-control">
+                  <option value="men">Men</option>
+                  <option value="women">Women</option>
+                </Field>
+                <ErrorMessage name="genre" component="div" className="text-danger" />
+              </Form.Group>
+            </div>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>Close</Button>
+              <Button type="submit" variant="primary" disabled={isSubmitting}>
+                {editingUser ? 'Modifier User' : 'Ajouter'}
+              </Button>
+            </Modal.Footer>
+          </div>
+        </FormikForm>
+      )}
+    </Formik>
   </Modal.Body>
-  <Modal.Footer>
-    <Button variant="secondary" onClick={handleClose}>Close</Button>
-    <Button variant="primary" onClick={editingUser ? handleUpdateUser : handleAddUser}>
-      {editingUser ? 'Update User' : 'Ajouter'}
-    </Button>
-  </Modal.Footer>
 </Modal>
 
 
+<Modal show={showDetailsModal} onHide={handleDetailsModalClose} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>Détails du Travail</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          <div className="form-row">
+            <Form.Group controlId="formMonth" className="form-group-inline">
+              <Form.Label>Mois</Form.Label>
+              <Form.Control
+                as="select"
+                value={month}
+                onChange={(e) => setMonth(Number(e.target.value))}
+                className="styled-select"
+              >
+                {[...Array(12)].map((_, i) => (
+                  <option key={i} value={i + 1}>
+                    {new Date(0, i).toLocaleString('fr-FR', { month: 'long' })}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group controlId="formYear" className="form-group-inline">
+              <Form.Label>Année</Form.Label>
+              <Form.Control
+                as="select"
+                value={year}
+                onChange={(e) => setYear(Number(e.target.value))}
+                className="styled-select"
+              >
+                {[...Array(10)].map((_, i) => (
+                  <option key={i} value={2020 + i}>
+                    {2020 + i}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+          </div>
+          <Button variant="primary" onClick={fetchMonthlyWorkTimes} className="styled-button">
+            Afficher les Détails
+          </Button>
+        </Form>
+        {monthlyWorkTimes ? (
+          <div className="result-container">
+            <p className="present-days">Jours Présents: {monthlyWorkTimes.monthly_work_times[0].present_days}</p>
+            <p className="absent-days">Jours Absents: {monthlyWorkTimes.monthly_work_times[0].absent_days}</p>
+            <p>Temps de Travail: {monthlyWorkTimes.monthly_work_times[0].total_work_time}</p>
+          </div>
+        ) : (
+          <p className="placeholder-text">Sélectionnez un mois et une année pour voir les détails.</p>
+        )}
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleDetailsModalClose}>
+          Fermer
+        </Button>
+      </Modal.Footer>
+    </Modal>
 
 <div style={{ marginTop: '20px', overflowY: 'auto', maxHeight: '400px' }}>
 <table className="usetab" style={{ borderCollapse: 'collapse', width: '100%' }}>
@@ -324,7 +496,7 @@ const UserManagement = () => {
       <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black', width: '300px' }}>email</th>
       <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Téléphone</th>
       <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Address</th>
-      <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Gender</th>
+      <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Genre</th>
       <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Actions</th>
     </tr>
   </thead>
@@ -361,6 +533,7 @@ const UserManagement = () => {
   </button>
 </td>
         <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+        <FaEye onClick={() => handleShowDetailsModal(user)} style={{ cursor: 'pointer', marginRight: '10px' }} />
           <FaUserEdit className="edit-button" onClick={() => handleEditUser(user)} style={{ margin:'3px' }} />
           <MdDeleteForever  className="delete-button" onClick={() => handleDeleteUser(user.id)} style={{ margin:'3px' }}/>
         </td>

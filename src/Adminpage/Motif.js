@@ -12,7 +12,7 @@ const Motif = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editMotifId, setEditMotifId] = useState(null);
   const [editMotifName, setEditMotifName] = useState('');
-  const [showMotifTable, setShowMotifTable] = useState(false); // State variable for toggling table visibility
+  const [showMotifTable, setShowMotifTable] = useState(false);
 
   useEffect(() => {
     fetchMotifs();
@@ -28,11 +28,11 @@ const Motif = () => {
       });
       setMotifs(response.data.motifs);
     } catch (error) {
-      console.error('Error fetching motifs:', error);
-      setError('Failed to fetch motifs. Please try again.');
+      console.error('Erreur lors de la récupération des motifs:', error);
+      setError('Échec de la récupération des motifs. Veuillez réessayer.');
     }
   };
-
+  
   const handleAddMotif = async () => {
     try {
       const authToken = localStorage.getItem('authToken');
@@ -46,25 +46,26 @@ const Motif = () => {
       setMotifs([...motifs, response.data.motif]);
       setNewMotifName('');
       setShowAddModal(false);
+      Swal.fire('Succès', 'Motif ajouté avec succès.', 'success');
     } catch (error) {
-      console.error('Error adding motif:', error);
-      setError('Failed to add motif. Please try again.');
+      console.error('Erreur lors de l\'ajout du motif:', error);
+      Swal.fire('Erreur', 'Échec de l\'ajout du motif. Veuillez réessayer.', 'error');
     }
   };
-
+  
   const handleDeleteMotif = async (id) => {
     try {
       const result = await Swal.fire({
-        title: 'Are you sure?',
-        text: 'You will not be able to recover this motif!',
+        title: 'Êtes-vous sûr(e) ?',
+        text: 'Vous ne pourrez pas récupérer ce motif !',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'No, cancel',
+        confirmButtonText: 'Oui, supprimez-le !',
+        cancelButtonText: 'Non, annuler',
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6'
       });
-
+  
       if (result.isConfirmed) {
         const authToken = localStorage.getItem('authToken');
         await axios.delete(`${API_BASE_URL}/api/admin/deletemotif/${id}`, {
@@ -74,11 +75,11 @@ const Motif = () => {
         });
         const updatedMotifs = motifs.filter((motif) => motif.id !== id);
         setMotifs(updatedMotifs);
-        Swal.fire('Deleted!', 'The motif has been deleted.', 'success');
+        Swal.fire('Supprimé !', 'Le motif a été supprimé.', 'success');
       }
     } catch (error) {
-      console.error('Error deleting motif:', error);
-      setError('Failed to delete motif. Please try again.');
+      console.error('Erreur lors de la suppression du motif:', error);
+      Swal.fire('Erreur', 'Échec de la suppression du motif. Veuillez réessayer.', 'error');
     }
   };
 
@@ -98,11 +99,13 @@ const Motif = () => {
       setMotifs(updatedMotifs);
       setEditMotifId(null);
       setEditMotifName('');
+      Swal.fire('Succès', 'Motif mis à jour avec succès.', 'success');
     } catch (error) {
-      console.error('Error editing motif:', error);
-      setError('Failed to edit motif. Please try again.');
+      console.error('Erreur lors de la modification du motif:', error);
+      Swal.fire('Erreur', 'Échec de la modification du motif. Veuillez réessayer.', 'error');
     }
   };
+  
 
   const openEditModal = (id, motifName) => {
     setEditMotifId(id);
@@ -119,8 +122,8 @@ const Motif = () => {
       <h2>Motifs</h2>
       {error && <p>{error}</p>}
 
-      <Button variant="primary" onClick={() => setShowAddModal(true)}>Ajoutez Motif</Button>
-      <Button variant="info" style={{ marginLeft: '10px' }} onClick={() => setShowMotifTable(true)}>Gérer motifs</Button> {/* Show motifs table in modal */}
+      <Button variant="primary" onClick={() => setShowAddModal(true)}>Ajouter</Button>
+      <Button variant="info" style={{ marginLeft: '10px' }} onClick={() => setShowMotifTable(true)}>Gérer motifs</Button>
 
       <Modal show={showMotifTable} onHide={() => setShowMotifTable(false)}>
         <Modal.Header closeButton>
@@ -131,19 +134,19 @@ const Motif = () => {
             <Table bordered hover responsive>
               <thead>
                 <tr>
-                  <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>#</th>
-                  <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Name</th>
-                  <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Actions</th>
+                  <th>#</th>
+                  <th>Nom</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {motifs.map((motif, index) => (
-                  <tr key={motif.id} style={{ backgroundColor: (index + 1) % 4 === 2 || (index + 1) % 4 === 0 ? '#f2f2f2' : 'white' }}>
-                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>{index + 1}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>{motif.motif_name}</td>
+                  <tr key={motif.id}>
+                    <td>{index + 1}</td>
+                    <td style={{ fontWeight: 'bold' }}>{motif.motif_name}</td>
                     <td>
-                      <Button variant="info" onClick={() => openEditModal(motif.id, motif.motif_name)}>Modifier</Button>
-                      <Button variant="danger" onClick={() => handleDeleteMotif(motif.id)}>Supprimer</Button>
+                      <Button style={{ marginRight: '5px', backgroundColor: '#4696C4' }} onClick={() => openEditModal(motif.id, motif.motif_name)}>Modifier</Button>
+                      <Button style={{ backgroundColor: '#D51515' }} onClick={() => handleDeleteMotif(motif.id)}>Supprimer</Button>
                     </td>
                   </tr>
                 ))}
@@ -158,11 +161,11 @@ const Motif = () => {
 
       <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Ajoutez Motif</Modal.Title>
+          <Modal.Title>Ajouter Motif</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Group>
-            <Form.Label>Motif </Form.Label>
+            <Form.Label>Motif</Form.Label>
             <Form.Control
               type="text"
               value={newMotifName}
@@ -182,7 +185,7 @@ const Motif = () => {
         </Modal.Header>
         <Modal.Body>
           <Form.Group>
-            <Form.Label>Motif </Form.Label>
+            <Form.Label>Motif</Form.Label>
             <Form.Control
               type="text"
               value={editMotifName}

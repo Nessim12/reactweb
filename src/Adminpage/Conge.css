@@ -64,9 +64,10 @@
   
   .btn.btn-view-reason {
     background-color: #007bff;
+    color: #fff;
   }
   .btn.btn-view-reasons {
-    background-color: #00ff04;
+    background-color: #3C9B23;
   }
   
   /* Modal Styles */

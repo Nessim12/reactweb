@@ -27,6 +27,8 @@ const Dashboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(5);
   const [chartData, setChartData] = useState(null);
+  const isSelectedDateSunday = new Date(selectedDate).getDay() === 0;
+
 
   const fetchData = useCallback(async (date) => {
     try {
@@ -65,7 +67,9 @@ const Dashboard = () => {
     } else if (statusFilter === 'accepter') {
       return allUsersData.filter(user => user.status === 'present');
     } else if (statusFilter === 'refuser') {
-      return allUsersData.filter(user => user.status !== 'present');
+      return allUsersData.filter(user => user.status === 'absent');
+    } else if (statusFilter === 'conge') {
+      return allUsersData.filter(user => user.status === 'Conge');
     }
   };
 
@@ -193,6 +197,7 @@ const Dashboard = () => {
       <option value="all">Tous les Utilisateurs</option>
       <option value="accepter">Les Utilisateurs Présents</option>
       <option value="refuser">Les Utilisateurs Absents</option>
+      <option value="conge">Les Utilisateurs en congé</option>
     </select>
   </div>
 </div>
@@ -208,7 +213,7 @@ const Dashboard = () => {
       <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Nom de famille</th>
       <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black', width: '300px' }}>email</th>
       <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Téléphone</th>
-      <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Work_mod</th>
+      <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>mode de travail</th>
       <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Statut</th>
       <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Disponibilité</th>
       <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Heures travaillées</th>
@@ -242,19 +247,42 @@ const Dashboard = () => {
     </>
   )}
 </td>
-<td style={{ border: '1px solid #ddd', padding: '8px'}}>
-  {user.status === 'present' ? (
-    <button style={{ backgroundColor: '#3498db', color: 'white', padding: '5px', borderRadius: '15px', fontSize: '15px' }}>
-      <FaCheckCircle style={{ marginRight: '5px',marginTop:'-2px' }} />
-      Present
-    </button>
-  ) : (
-    <button style={{ backgroundColor: '#e74c3c', color: 'white', padding: '5px', borderRadius: '15px', fontSize: '15px' }}>
-      <FaTimesCircle style={{ marginRight: '5px',marginTop:'-2px' }} />
-      Absent
-    </button>
-  )}
-</td>
+<td style={{ border: '1px solid #ddd', padding: '8px' }}>
+          {isSelectedDateSunday ? (
+            <button style={{ backgroundColor: '#f39c12', color: 'white', padding: '5px', borderRadius: '15px', fontSize: '15px' }}>
+              <FaCheckCircle style={{ marginRight: '5px', marginTop: '-2px' }} />
+              Jour férié
+            </button>
+          ) : (
+            user.status === 'Holiday' ? (
+              <button style={{ backgroundColor: '#f39c12', color: 'white', padding: '5px', borderRadius: '15px', fontSize: '15px' }}>
+                <FaCheckCircle style={{ marginRight: '5px', marginTop: '-2px' }} />
+                Jour férié
+              </button>
+            ) : (
+              user.status === 'present' ? (
+                <button style={{ backgroundColor: '#3498db', color: 'white', padding: '5px', borderRadius: '15px', fontSize: '15px' }}>
+                  <FaCheckCircle style={{ marginRight: '5px', marginTop: '-2px' }} />
+                  Présent
+                </button>
+              ) : (
+                user.status === 'Conge' ? (
+                  <button style={{ backgroundColor: '#f39c12', color: 'white', padding: '5px', borderRadius: '15px', fontSize: '15px' }}>
+                    <FaCheckCircle style={{ marginRight: '5px', marginTop: '-2px' }} />
+                    Congé
+                  </button>
+                ) : (
+                  <button style={{ backgroundColor: '#e74c3c', color: 'white', padding: '5px', borderRadius: '15px', fontSize: '15px' }}>
+                    <FaTimesCircle style={{ marginRight: '5px', marginTop: '-2px' }} />
+                    Absent
+                  </button>
+                )
+              )
+            )
+          )}
+        </td>
+
+
         <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{renderAvailabilityIcon(user.availability)}</td>
         <td style={{ border: '1px solid #ddd', padding: '8px', fontWeight: 'bold', color: 'black', textAlign: 'center' }}>
   {user.time_worked ? (
