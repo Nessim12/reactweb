@@ -160,9 +160,17 @@ button {
 .absent-days {
   color: red;
 }
-
+.conge-days {
+  color: blue; /* Bleu pour les jours de congé */
+}
+.work-time {
+  text-align: center; /* Centrer le texte */
+  font-weight: bold;
+  font-size: larger; /* Mettre en gras */
+}
 /* Style the placeholder text */
 .placeholder-text {
   text-align: center;
   margin-top: 20px;
+
 }

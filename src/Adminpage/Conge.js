@@ -162,6 +162,7 @@ const Conge = () => {
               <thead>
                 <tr>
                   <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>#</th>
+                  <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>CIN</th>
                   <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Utilisateur</th>
                   <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Solde Congé</th>
                   <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Date Début</th>
@@ -178,6 +179,7 @@ const Conge = () => {
                 {currentDemandes.slice(0).reverse().map((demande, index) => (
                   <tr key={demande.id} style={{ backgroundColor: (index + 1) % 4 === 2 || (index + 1) % 4 === 0 ? '#f2f2f2' : 'white' }} >
                     <td style={{ border: '1px solid #ddd', padding: '8px' }}>{indexOfFirstUser + index + 1}</td>
+                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>{demande.user ? `${demande.user.cin}` : ''}</td>
                     <td style={{ border: '1px solid #ddd', padding: '8px' }}>{demande.user ? `${demande.user.firstname} ${demande.user.lastname}` : ''}</td>
                     <td style={{ border: '1px solid #ddd', padding: '8px' }}>{demande.user ? `${demande.user.soldecongée}` : ''}</td>
                     <td style={{ border: '1px solid #ddd', padding: '8px' }}>

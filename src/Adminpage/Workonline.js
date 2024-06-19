@@ -107,6 +107,7 @@ const WorkOnline = () => {
         <thead>
             <tr>
             <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>#</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>CIN</th>
                 <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Prénom</th>
                 <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>Nom</th>
                 <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2', color: 'black' }}>
@@ -133,6 +134,7 @@ const WorkOnline = () => {
             {currentRequests.slice(0).reverse().map((request, index) => (
                 <tr key={request.id} style={{ backgroundColor: (index + 1) % 4 === 2 || (index + 1) % 4 === 0 ? '#f2f2f2' : 'white' }}>
                     <td style={{ border: '1px solid #ddd', padding: '8px' }}>{indexOfFirstRequest + index + 1}</td>
+                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>{request.user ? request.user.cin:''}</td>
                     <td style={{ border: '1px solid #ddd', padding: '8px' }}>{request.user ? request.user.firstname : 'N/A'}</td>
                     <td style={{ border: '1px solid #ddd', padding: '8px' }}>{request.user ? request.user.lastname : ''}</td>
                     <td style={{ border: '1px solid #ddd', padding: '8px' }}>

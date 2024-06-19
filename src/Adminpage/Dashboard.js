@@ -75,7 +75,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchData(selectedDate);
-  }, [selectedDate]);
+    const interval = setInterval(() => fetchData(selectedDate), 10000); // Refresh every 10 seconds
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [selectedDate, fetchData]);
 
   const handlepointageClick = async (user) => {
     setSelectedUser(user);

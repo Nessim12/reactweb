@@ -70,6 +70,7 @@ const UserManagement = () => {
     };
 
     fetchUsers();
+
   }, []);
 
   useEffect(() => {
@@ -470,9 +471,13 @@ const UserManagement = () => {
         </Form>
         {monthlyWorkTimes ? (
           <div className="result-container">
-            <p className="present-days">Jours Présents: {monthlyWorkTimes.monthly_work_times[0].present_days}</p>
-            <p className="absent-days">Jours Absents: {monthlyWorkTimes.monthly_work_times[0].absent_days}</p>
-            <p>Temps de Travail: {monthlyWorkTimes.monthly_work_times[0].total_work_time}</p>
+           <p className="present-days">Jours travaillés : {monthlyWorkTimes.monthly_work_times[0].present_days}</p>
+<p className="absent-days">Jours d'absence : {monthlyWorkTimes.monthly_work_times[0].absent_days}</p>
+<p className="conge-days">Jours de congé : {monthlyWorkTimes.monthly_work_times[0].conge_days}</p>
+<p >Nombre total de jours : {monthlyWorkTimes.monthly_work_times[0].days_in_month}</p>
+<p className="work-time">Temps de travail : {monthlyWorkTimes.monthly_work_times[0].total_work_time}</p>
+
+
           </div>
         ) : (
           <p className="placeholder-text">Sélectionnez un mois et une année pour voir les détails.</p>
@@ -505,8 +510,8 @@ const UserManagement = () => {
       <tr key={user.user_id} style={{ backgroundColor: (index + 1) % 4 === 2 || (index + 1) % 4 === 0 ? '#f2f2f2' : 'white' }} >
         <td style={{ border: '1px solid #ddd', padding: '8px' }}>{indexOfFirstUser + index + 1}</td>
         <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.cin}</td>
-        <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.firstname}</td>
         <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.lastname}</td>
+        <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.firstname}</td>
         <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.email}</td>
         <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.tel}</td>
         <td style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: (index + 1) % 4 === 2 || (index + 1) % 4 === 0 ? '#f2f2f2' : 'white' }}>
